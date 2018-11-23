@@ -14,7 +14,7 @@ local sensitivityTable={3.076913675,2.499984721,
 0.597005348,0.571428571
 }
 local scopeTable={};
-scopeTable[3]=2.3;
+scopeTable[3]=2.25;
 scopeTable[1]=1;
 local tempRecoil={};
 local sensitivity=10;       --士兵灵敏度,最低1，最高20，必须是整数
@@ -76,8 +76,9 @@ end
 
 function AutoRecovery(weapon)   --自动压枪模块，用于自动压枪
     local recoilofTime;
-    local time=20;
-    local lefttime=0;
+    local startTime=GetRunningTime();
+    local time;
+    local lefttime=startTime;
     local totalRecoil=0
     local totalShoot=1;
     local i;
@@ -87,21 +88,21 @@ function AutoRecovery(weapon)   --自动压枪模块，用于自动压枪
         end
     end
     repeat
+        Sleep(20);
+        time=GetRunningTime();
         if (time>lefttime) then
             lefttime=lefttime+CalcTime(weapon);                 --在是时间池中加入本次射击的时间
-            --totalRecoil=totalRecoil+CalcRecovery(weapon,totalShoot);          --在反冲池中加入本次反冲的时间
-            totalRecoil=totalRecoil+tempRecoil[totalShoot];
+            totalRecoil=totalRecoil+tempRecoil[totalShoot];     --在反冲池中加入本次反冲的时间
             if (totalShoot<recoilTable[weapon].max) then   
                 totalShoot=totalShoot+1;
             end
         end
-        recoilofTime=math.floor(10.0*totalRecoil*time/lefttime)/10; --计算一次time应该反冲的量
+        recoilofTime=math.floor(10.0*totalRecoil*(time-startTime)/(lefttime-startTime))/10; --计算一次time应该反冲的量
         totalRecoil=totalRecoil-recoilofTime                   --反冲池中减去本次反冲量
-        lefttime=lefttime-20;
+        startTime=time;
         OutputLogMessage("%f\n", recoilofTime);
         if (IsMouseButtonPressed(3)) then 
             MoveMouseRelative(0,recoilofTime);
         end
-        Sleep(20);
     until not IsMouseButtonPressed(1)
 end
