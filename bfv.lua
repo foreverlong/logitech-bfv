@@ -19,8 +19,8 @@ local tempRecoil={};
 local sensitivity=10;       --士兵灵敏度,最低1，最高20，必须是整数
 local uniform=true;        --是否开启统一瞄准（控制-高级内开启）
 local coefficient=133;      --统一瞄准倍率（默认133%)
-local weapon="bren";        --武器名称设定
-local scope=3;              --镜子倍率设定
+local weapon="FG42";        --武器名称设定
+local scope=1;              --镜子倍率设定
 --突击兵武器数据
 recoilTable["1-5"]={     --Gewher1-5
     basic={};
@@ -58,9 +58,10 @@ recoilTable["1916"]={      --1916半自动
     max=0;
 }
 recoilTable["1-5b"]={       --Gewher1-5半自动
-    basic={};
+    basic={37.85};
+    scope={94};
     speed=360;
-    max=0;
+    max=1;
 }
 
 --医疗兵
@@ -108,20 +109,28 @@ recoilTable["KE7"]={
 }
 recoilTable["bren"]={   --布伦轻机枪
     basic={55,50,42,38.8};             --压枪系数
+    scope={55,50,42,38.8}; 
     speed=514;              --射速
     max=4;                  --压枪系数数量
 }
 recoilTable["Lewis"]={     
     basic={};
+    scope={60,55,55,50,37.15};
     speed=540;
-    max=0;
+    max=5;
 }
 recoilTable["FG42"]={
-    basic={};
+    basic={29.35};
     speed=670;
-    max=0;
+    max=1;
 }
 --侦察兵：无
+local recoilofTime;
+local startTime;
+local time;
+local lefttime=startTime;
+local totalRecoil=0;
+local totalShoot;
 function OnEvent(event, arg)
     OutputLogMessage("event = %s, arg = %s\n", event, arg);
     if (event == "PROFILE_ACTIVATED") then
@@ -135,69 +144,63 @@ function OnEvent(event, arg)
     end
     if (event=="MOUSE_BUTTON_PRESSED" and arg==1) then
         mousePush=true;
-        SetMKeyState(3);
-        if (weapon~="" and autoRecovery) then 
-            AutoRecovery(weapon);
+        if (autoRecovery) then
+            startTime=GetRunningTime();
+            lefttime=startTime;
+            totalRecoil=0;
+            totalShoot=1;
         end
+        SetMKeyState(3);
     end
 
     if (event=="MOUSE_BUTTON_RELEASED" and arg==1) then
         mousePush=false;
     end
-    if (event=="M_PRESSED" and arg==3) then
-        if (quickClick and mousePush) then 
-            AutoClick();
+    if (event=="M_PRESSED" and arg==3 and mousePush) then
+        if (quickClick) then
+            PressMouseButton(1);
+            Sleep(15);
+            ReleaseMouseButton(1);
+        end
+        if (weapon~="" and autoRecovery and IsMouseButtonPressed(3)) then 
+            AutoRecovery(weapon);
+        end
+        if (quickClick or weapon~="" and autoRecovery) then
+            Sleep(5);
+            SetMKeyState(3);
         end
     end
 end
 
-function AutoClick()
-    Sleep(10);
-    PressMouseButton(1);
-    Sleep(10);
-    ReleaseMouseButton(1);
-    SetMKeyState(3);
-end
 function CalcTime(weapon)
     return(math.floor(60000.0/recoilTable[weapon].speed)+1);
 end
 function CalcRecovery(weapon,totalShoot)       --计算下一次射击需要下移的量
     local recoilNow;
-    recoilNow=recoilTable[weapon].basic[totalShoot];
+    if (scope==1) then
+        recoilNow=recoilTable[weapon].basic[totalShoot];
+    else
+        recoilNow=recoilTable[weapon].scope[totalShoot];
+    end
     recoilNow=recoilNow*sensitivityTable[sensitivity];
-    recoilNow=recoilNow*scopeTable[scope]
+    --recoilNow=recoilNow*scopeTable[scope]
     return(recoilNow);
 end
 
 function AutoRecovery(weapon)   --自动压枪模块，用于自动压枪
-    local recoilofTime;
-    local startTime=GetRunningTime();
-    local time;
-    local lefttime=startTime;
-    local totalRecoil=0
-    local totalShoot=1;
-    local i;
-    if (tempRecoil[0]==nil) then 
-        for i=1,recoilTable[weapon].max,1 do
-            tempRecoil[i]=CalcRecovery(weapon,i)
+    time=GetRunningTime();
+    if (time>lefttime) then
+        lefttime=lefttime+CalcTime(weapon);                 --在时间池中加入本次射击的时间
+        totalRecoil=totalRecoil+CalcRecovery(weapon,totalShoot);     --在反冲池中加入本次反冲
+        if (totalShoot<recoilTable[weapon].max) then   
+            totalShoot=totalShoot+1;
         end
     end
-    repeat
-        Sleep(20);
-        time=GetRunningTime();
-        if (time>lefttime) then
-            lefttime=lefttime+CalcTime(weapon);                 --在时间池中加入本次射击的时间
-            totalRecoil=totalRecoil+tempRecoil[totalShoot];     --在反冲池中加入本次反冲
-            if (totalShoot<recoilTable[weapon].max) then   
-                totalShoot=totalShoot+1;
-            end
-        end
-        recoilofTime=math.floor(10.0*totalRecoil*(time-startTime)/(lefttime-startTime))/10; --计算一次time应该反冲的量
-        totalRecoil=totalRecoil-recoilofTime                   --反冲池中减去本次反冲量
-        startTime=time;
-        OutputLogMessage("%f\n", recoilofTime);
-        if (IsMouseButtonPressed(3)) then 
-            MoveMouseRelative(0,recoilofTime);
-        end
-    until not IsMouseButtonPressed(1)
+    recoilofTime=math.floor(10.0*totalRecoil*(time-startTime)/(lefttime-startTime))/10; --计算一次time应该反冲的量
+    totalRecoil=totalRecoil-recoilofTime                   --反冲池中减去本次反冲量
+    startTime=time;
+    OutputLogMessage("%f\n", recoilofTime);
+    if (IsMouseButtonPressed(3)) then 
+        MoveMouseRelative(0,recoilofTime);
+    end
 end
