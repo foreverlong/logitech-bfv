@@ -14,19 +14,19 @@ local sensitivityTable={3.076913675,2.499984721,
 0.597005348,0.571428571
 }
 local scopeTable={};
-scopeTable[3]=2.25;
-scopeTable[1]=1;
+scopeTable[3]=1;
+scopeTable[1]=0.423;
 local tempRecoil={};
 local sensitivity=10;       --士兵灵敏度,最低1，最高20，必须是整数
 local uniform=true;        --是否开启统一瞄准（控制-高级内开启）
 local coefficient=133;      --统一瞄准倍率（默认133%)
 recoilTable["bren"]={   --布伦轻机枪
-basic={22,22,16.9};             --压枪系数
+basic={50,50,43,40,38.8};             --压枪系数
 speed=514;              --射速
-max=3;                  --压枪系数数量
+max=5;                  --压枪系数数量
 }
 local weapon="bren";
-local scope=3;
+local scope=1;
 function OnEvent(event, arg)
     OutputLogMessage("event = %s, arg = %s\n", event, arg);
     if (event == "PROFILE_ACTIVATED") then
@@ -91,8 +91,8 @@ function AutoRecovery(weapon)   --自动压枪模块，用于自动压枪
         Sleep(20);
         time=GetRunningTime();
         if (time>lefttime) then
-            lefttime=lefttime+CalcTime(weapon);                 --在是时间池中加入本次射击的时间
-            totalRecoil=totalRecoil+tempRecoil[totalShoot];     --在反冲池中加入本次反冲的时间
+            lefttime=lefttime+CalcTime(weapon);                 --在时间池中加入本次射击的时间
+            totalRecoil=totalRecoil+tempRecoil[totalShoot];     --在反冲池中加入本次反冲
             if (totalShoot<recoilTable[weapon].max) then   
                 totalShoot=totalShoot+1;
             end
