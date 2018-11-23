@@ -11,8 +11,7 @@ local sensitivityTable={3.076913675,2.499984721,
 0.8163178,0.769228419,
 0.727272727,0.689656226,
 0.655737204,0.62499618,
-0.597005348,0.571428571
-}
+0.597005348,0.571428571}
 local scopeTable={};
 scopeTable[3]=1;
 scopeTable[1]=0.423;
@@ -20,13 +19,109 @@ local tempRecoil={};
 local sensitivity=10;       --士兵灵敏度,最低1，最高20，必须是整数
 local uniform=true;        --是否开启统一瞄准（控制-高级内开启）
 local coefficient=133;      --统一瞄准倍率（默认133%)
-recoilTable["bren"]={   --布伦轻机枪
-basic={50,50,43,40,38.8};             --压枪系数
-speed=514;              --射速
-max=5;                  --压枪系数数量
+local weapon="bren";        --武器名称设定
+local scope=3;              --镜子倍率设定
+--突击兵武器数据
+recoilTable["1-5"]={     --Gewher1-5
+    basic={};
+    speed=670;
+    max=0;
 }
-local weapon="bren";
-local scope=1;
+recoilTable["43"]={      --Gewher 43
+    basic={};
+    speed=300;
+    max=0;
+}
+recoilTable["M1A1"]={      --M1A1
+    basic={};
+    speed=450;
+    max=0;
+}
+recoilTable["1907"]={      --MF1907
+    basic={};
+    speed=770;
+    max=0;
+}
+recoilTable["SMLE"]={      --SMLE特纳
+    basic={};
+    speed=360;
+    max=0;
+}
+recoilTable["stg44"]={      --STG44
+    basic={};
+    speed=600;
+    max=0;
+}
+recoilTable["1916"]={      --1916半自动
+    basic={};
+    speed=257;
+    max=0;
+}
+recoilTable["1-5b"]={       --Gewher1-5半自动
+    basic={};
+    speed=360;
+    max=0;
+}
+
+--医疗兵
+
+recoilTable["sten"]={
+    basic={};
+    speed=540;
+    max=0;
+}
+recoilTable["Suomi"]={
+    basic={};
+    speed=770;
+    max=0;
+}
+recoilTable["MP40"]={ 
+    basic={};
+    speed=540;
+    max=0;
+}
+recoilTable["MP28"]={
+    basic={};
+    speed=670;
+    max=0;
+}
+recoilTable["EMP"]={     
+    basic={};
+    speed=568;
+    max=0;
+}
+recoilTable["MP34"]={   
+    basic={};
+    speed=514;
+    max=0;
+}
+recoilTable["M1928A1"]={      --汤姆逊
+    basic={};
+    speed=720;
+    max=0;
+}
+--支援兵
+recoilTable["KE7"]={     
+    basic={};
+    speed=638;
+    max=0;
+}
+recoilTable["bren"]={   --布伦轻机枪
+    basic={55,50,42,38.8};             --压枪系数
+    speed=514;              --射速
+    max=4;                  --压枪系数数量
+}
+recoilTable["Lewis"]={     
+    basic={};
+    speed=540;
+    max=0;
+}
+recoilTable["FG42"]={
+    basic={};
+    speed=670;
+    max=0;
+}
+--侦察兵：无
 function OnEvent(event, arg)
     OutputLogMessage("event = %s, arg = %s\n", event, arg);
     if (event == "PROFILE_ACTIVATED") then
