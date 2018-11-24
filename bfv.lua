@@ -2,25 +2,13 @@ local quickClick=false;
 local mousePush=false;
 local autoRecovery=false;
 local recoilTable={};
-local sensitivityTable={3.076913675,2.499984721,
-2.105271199,1.818181818,
-1.6,1.428571429,
-1.290328495,1.176470588,
-1.081069519,1,
-0.930236822,0.869549274,
-0.8163178,0.769228419,
-0.727272727,0.689656226,
-0.655737204,0.62499618,
-0.597005348,0.571428571}
 local scopeTable={};
 scopeTable[3]=1;
 scopeTable[1]=0.423;
 local tempRecoil={};
-local sensitivity=10;       --士兵灵敏度,最低1，最高20，必须是整数
-local uniform=true;        --是否开启统一瞄准（控制-高级内开启）
-local coefficient=133;      --统一瞄准倍率（默认133%)
 local weapon="FG42";        --武器名称设定
 local scope=1;              --镜子倍率设定
+local temp=1;
 --突击兵武器数据
 recoilTable["1-5"]={     --Gewher1-5
     basic={};
@@ -109,7 +97,7 @@ recoilTable["KE7"]={
 }
 recoilTable["bren"]={   --布伦轻机枪
     basic={55,50,42,38.8};             --压枪系数
-    scope={55,50,42,38.8}; 
+    scope={65,65,49,45.4}; 
     speed=514;              --射速
     max=4;                  --压枪系数数量
 }
@@ -120,9 +108,9 @@ recoilTable["Lewis"]={
     max=5;
 }
 recoilTable["FG42"]={
-    basic={29.35};
+    basic={32,32,32,32,29.35};
     speed=670;
-    max=1;
+    max=5;
 }
 --侦察兵：无
 local recoilofTime;
@@ -182,8 +170,7 @@ function CalcRecovery(weapon,totalShoot)       --计算下一次射击需要下�
     else
         recoilNow=recoilTable[weapon].scope[totalShoot];
     end
-    recoilNow=recoilNow*sensitivityTable[sensitivity];
-    --recoilNow=recoilNow*scopeTable[scope]
+    recoilNow=recoilNow*temp;
     return(recoilNow);
 end
 
@@ -197,10 +184,12 @@ function AutoRecovery(weapon)   --自动压枪模块，用于自动压枪
         end
     end
     recoilofTime=math.floor(10.0*totalRecoil*(time-startTime)/(lefttime-startTime))/10; --计算一次time应该反冲的量
-    totalRecoil=totalRecoil-recoilofTime                   --反冲池中减去本次反冲量
-    startTime=time;
-    OutputLogMessage("%f\n", recoilofTime);
-    if (IsMouseButtonPressed(3)) then 
-        MoveMouseRelative(0,recoilofTime);
+    if (recoilofTime>0) then
+        totalRecoil=totalRecoil-recoilofTime                   --反冲池中减去本次反冲量
+        startTime=time;
+        if (IsMouseButtonPressed(3)) then 
+            MoveMouseRelative(0,recoilofTime);
+        end
     end
+    OutputLogMessage("%f\n", recoilofTime);
 end
