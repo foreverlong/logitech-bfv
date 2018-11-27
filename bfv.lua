@@ -6,8 +6,8 @@ local scopeTable={};
 scopeTable[3]=1;
 scopeTable[1]=0.423;
 local tempRecoil={};
-local weapon="FG42";        --武器名称设定
-local scope=1;              --镜子倍率设定
+local weapon="Lewis";        --武器名称设定
+local scope=3;              --镜子倍率设定
 local temp=1;
 --突击兵武器数据
 recoilTable["1-5"]={     --Gewher1-5
@@ -59,10 +59,10 @@ recoilTable["sten"]={
     speed=540;
     max=0;
 }
-recoilTable["Suomi"]={
-    basic={};
+recoilTable["suomi"]={
+    basic={35,36,37,38.18};
     speed=770;
-    max=0;
+    max=4;
 }
 recoilTable["MP40"]={ 
     basic={};
@@ -103,7 +103,7 @@ recoilTable["bren"]={   --布伦轻机枪
 }
 recoilTable["Lewis"]={     
     basic={};
-    scope={60,55,55,50,37.15};
+    scope={60,55,50,50,37.18};
     speed=540;
     max=5;
 }
