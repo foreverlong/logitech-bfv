@@ -3,12 +3,11 @@ local mousePush=false;
 local autoRecovery=false;
 local recoilTable={};
 local scopeTable={};
+scopeTable[0]=0.673;
+scopeTable[1]=1;
 scopeTable[3]=1;
-scopeTable[1]=0.423;
-local tempRecoil={};
-local weapon="Lewis";        --武器名称设定
-local scope=3;              --镜子倍率设定
-local temp=1;
+local weapon="EMP";        --武器名称设定
+local scope=1;              --镜子倍率设定
 --突击兵武器数据
 recoilTable["1-5"]={     --Gewher1-5
     basic={};
@@ -17,13 +16,13 @@ recoilTable["1-5"]={     --Gewher1-5
 }
 recoilTable["43"]={      --Gewher 43
     basic={};
-    speed=300;
+    speed=300;  
     max=0;
-}
+} 
 recoilTable["M1A1"]={      --M1A1
     basic={};
     speed=450;
-    max=0;
+    max=0; 
 }
 recoilTable["1907"]={      --MF1907
     basic={};
@@ -46,7 +45,7 @@ recoilTable["1916"]={      --1916半自动
     max=0;
 }
 recoilTable["1-5b"]={       --Gewher1-5半自动
-    basic={37.85};
+    basic={39.232};
     scope={94};
     speed=360;
     max=1;
@@ -65,9 +64,9 @@ recoilTable["suomi"]={
     max=4;
 }
 recoilTable["MP40"]={ 
-    basic={};
+    basic={30,30,30,30,36};
     speed=540;
-    max=0;
+    max=5;
 }
 recoilTable["MP28"]={
     basic={};
@@ -75,9 +74,9 @@ recoilTable["MP28"]={
     max=0;
 }
 recoilTable["EMP"]={     
-    basic={};
+    basic={32,34.56};
     speed=568;
-    max=0;
+    max=2;
 }
 recoilTable["MP34"]={   
     basic={};
@@ -96,13 +95,13 @@ recoilTable["KE7"]={
     max=0;
 }
 recoilTable["bren"]={   --布伦轻机枪
-    basic={55,50,42,38.8};             --压枪系数
-    scope={65,65,49,45.4}; 
+    basic={27.3,27.3,20.58,18.95};             --压枪系数
+    scope={65,65,49,45.4};  
     speed=514;              --射速
     max=4;                  --压枪系数数量
 }
 recoilTable["Lewis"]={     
-    basic={};
+    basic={25,22.95,20.868,20.868,17.517};
     scope={60,55,50,50,37.18};
     speed=540;
     max=5;
@@ -165,12 +164,12 @@ function CalcTime(weapon)
 end
 function CalcRecovery(weapon,totalShoot)       --计算下一次射击需要下移的量
     local recoilNow;
-    if (scope==1) then
+    if (scope==1 or scope==0) then
         recoilNow=recoilTable[weapon].basic[totalShoot];
     else
         recoilNow=recoilTable[weapon].scope[totalShoot];
     end
-    recoilNow=recoilNow*temp;
+    recoilNow=recoilNow*scopeTable[scope];
     return(recoilNow);
 end
 
