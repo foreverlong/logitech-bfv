@@ -2,131 +2,26 @@ local quickClick=false;
 local mousePush=false;
 local autoRecovery=false;
 local recoilTable={};
-local fireKey="f9";         --
-local weapon="ke7";        --武器名称设定
-local scope="AA";              --镜子倍率设定
+local fireKey="f7";         --
+local weapon="l85a2";        --武器名称设定
+local scope="2.5x";              --镜子倍率设定
+local specialRecoil=false;
+local recoilState=1;
+local Xlevel=0.5;
+local Ylevel=1;
+local stateTime=11.5;
+local stateTableX={1,-1,-1,1};
+local stateTableY={-1,1,-1,1};
+local recoilLevel=8;
 --突击兵武器数据
-recoilTable["1-5"]={     --Gewher1-5
-    basic={};
-    speed=670; 
-    max=0;
-}
-recoilTable["43"]={      --Gewher 43
-    basic={};
-    scope={125,125,128};
-    speed=300;  
-} 
-recoilTable["m1a1"]={      --M1A1
-    basic={91.2};
+recoilTable["l85a2"]={       
+    basic={26};
     scope={
-        ["3x"]=1,
+        ["2.5x"]=1,
         ["iron"]=0.52
     };
-    ctrlRadio=0.75;
-    speed=450;
-}
-recoilTable["1907"]={      --MF1907
-    basic={27,30.54}; 
-    speed=770;
-}
-recoilTable["smle"]={      --SMLE特纳
-    basic={140};
-    scope={
-        ["3x"]=1,
-        ["iron"]=0.52
-    };
-    ctrlRadio=0.75;
-    speed=360;
-}
-recoilTable["stg44"]={      --STG44
-    basic={23.05};
-    speed=600;
-}
-recoilTable["1916"]={      --1916半自动
-    basic={};
-    scope={100,100,130};
-    speed=257; 
-}
-recoilTable["1-5b"]={       --Gewher1-5半自动
-    basic={127.5};
-    scope={
-        ["3x"]=1,
-        ["iron"]=0.52
-    };
-    ctrlRadio=0.75;
-    speed=360;
-}
-recoilTable["m42"]={
-    scope={41};
-    speed=450;
-}
-recoilTable["mas44"]={
-    scope={90,90,90,98};
-    speed=360;
-}
---医疗兵
-
-recoilTable["sten"]={
-    basic={};
-    speed=540;
-}
-recoilTable["suomi"]={
-    basic={25,32};
-    speed=770;
-}
-recoilTable["MP40"]={ 
-    basic={30,30,30,30,36};
-    speed=540;
-}
-recoilTable["MP28"]={
-    basic={};
     speed=670;
-}
-recoilTable["EMP"]={     
-    basic={32,34.56};
-    speed=568;
-}
-recoilTable["MP34"]={   
-    basic={};
-    speed=514;
-} 
-recoilTable["Tom"]={      --汤姆逊
-    basic={27.8};
-    speed=720;
-}
---支援兵
-recoilTable["ke7"]={     
-    basic={70,65,65,48};
-    scope={
-        ["3x"]=1,
-        ["iron"]=0.52,
-        ["AA"]=0.468
-    };
-    speed=638;
-    ctrlRadio=0.75;
-}
-recoilTable["bren"]={   --布伦轻机枪
-    basic={27.3,27.3,20.58,18.95};             --压枪系数
-    scope={65,65,49,45.4};  
-    speed=514;              --射速
-}
-recoilTable["lewis"]={     
-    basic={25,22.95,20.868,20.868,17.517};
-    scope={50,50,37.18};
-    speed=540;
-}
-recoilTable["FG42"]={
-    basic={32,32,32,29};
-    speed=670;
-}
-recoilTable["mg42"]={
-    basic={10};
-    speed=981;
-}
---侦察兵：
-recoilTable["1906"]={
-    scope={160,200};
-    speed=164;
+    ctrlRadio=1
 }
 local recoilofTime;
 local startTime;
@@ -150,16 +45,19 @@ function OnEvent(event, arg)
     end
     if (event=="MOUSE_BUTTON_PRESSED" and arg==8 ) then
         autoRecovery=not autoRecovery;
-    end
+	end
+	if (event=="MOUSE_BUTTON_PRESSED" and arg==11 ) then
+		specialRecoil=not specialRecoil;
+	end
     if (event=="MOUSE_BUTTON_PRESSED" and arg==2 ) then
         rightPress=true;
     end
     if (event=="MOUSE_BUTTON_RELEASED" and arg==2 ) then
         rightPress=false;
     end
-    if (event=="MOUSE_BUTTON_PRESSED" and arg==1 and not IsModifierPressed("lalt")) then
+	if (event=="MOUSE_BUTTON_PRESSED" and arg==1) then
         mousePush=true;
-        if (not quickClick) then
+        if (not quickClick and not (specialRecoil and rightPress)) then
             PressKey(fireKey);
         end
         if (autoRecovery) then
@@ -167,7 +65,8 @@ function OnEvent(event, arg)
             lefttime=startTime;
             totalRecoil=0;
             totalShoot=1;
-        end
+		end
+		recoilState=1;
         SetMKeyState(3);
     end
 
@@ -175,8 +74,19 @@ function OnEvent(event, arg)
         ReleaseKey(fireKey);
         mousePush=false;
     end
-    if (event=="M_PRESSED" and arg==3 and mousePush) then
-        OutputLogMessage("Press button 3\n");
+	if (event=="M_PRESSED" and arg==3 and mousePush) then
+		if (specialRecoil and rightPress) then
+			if (recoilState==1) then
+				PressKey(fireKey);
+			end
+			MoveMouseRelative(recoilLevel*Xlevel*stateTableX[recoilState],recoilLevel*Ylevel*stateTableY[recoilState]);
+			Sleep(stateTime)
+			if (recoilState==4) then 
+				ReleaseKey(fireKey);
+			end
+			recoilState=math.fmod(recoilState,4)+1;
+			SetMKeyState(3);
+		end
         if (quickClick) then
             PressKey(fireKey);
             Sleep(15); 

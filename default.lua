@@ -1,4 +1,4 @@
-local password="";
+local password=".cbz";
 local withShift={};
 withShift["!"]="1";
 withShift["@"]="2";
@@ -10,6 +10,9 @@ withShift["&"]="7";
 withShift["*"]="8";
 withShift["("]="9";
 withShift[")"]="0";
+withShift[">"]=0x34;
+local toKey={};
+toKey["."]=0x34;
 function OnEvent(event, arg)
 	OutputLogMessage("event = %s, arg = %s\n", event, arg);
     if (event == "PROFILE_ACTIVATED") then
@@ -24,8 +27,10 @@ function OnEvent(event, arg)
         PressAndReleaseMouseButton(1);
         Sleep(10);
         ReleaseKey("lctrl");
-        PressAndReleaseKey("right");
-        Sleep(200);
+        Sleep(500);
+        PressKey("right");
+        Sleep(50);
+        ReleaseKey("right");
     end
 end
 function inputPassword(password)
@@ -41,8 +46,7 @@ function inputPassword(password)
             ReleaseKey(withShift[temp]);
             Sleep(10);
             ReleaseKey("lshift");
-        else
-        if (string.lower(temp)~=temp) then
+		elseif (string.lower(temp)~=temp) then
             PressKey("lshift");
             Sleep(10);
             PressKey(string.lower(temp));
@@ -50,11 +54,18 @@ function inputPassword(password)
             ReleaseKey(string.lower(temp));
             Sleep(10);
             ReleaseKey("lshift");
-        else
+		else
+			temp=getRealKey(temp);
             PressKey(temp);
             Sleep(10);
             ReleaseKey(temp);
-        end end
+        end
         i=i+1;
     end
+end
+function getRealKey(temp)
+	if (toKey[temp]==nil) then
+		return(temp);
+	else return(toKey[temp]);
+	end
 end
