@@ -1,81 +1,122 @@
 state=false;
 open=false;
-mode=1;
+mode=4;
 --mode=1 抢房mode
 --mode=2 疯狂按Insert的mode
 --mode=3 演奏mode 
 --mode=4 制作mode，无限
 --mode=5 制作mode，指定次数
 --mode=6 转圈mode，防止被t
---mode=7 收藏品
-times=1;
-maker_name="60_level_pipa_hq"
+--mode=7 控制指令
+--mode=8 控制指令-限制次数
+--mode=10 连点器
+--mode=13 以太指环自动生产-分解系统
+--mode=14 巧手之主指环自动兑换-分解系统
+times=5;
+maker_name="80_yixiujiade"
+repair=true;
 is_collect=false
-maker_list={
-	["hong"]={{alt,"1",3700}};
-	["semi"]={"nj","ws2","jy","zw2","xd","xd","xd","mm","ws2","xy","yj","xd","kb","zf","mf3"};
-	["semi_too_fast"]={"nj","ws2","jy","zw2","xd","xd","xd","ws2","xd","kb","zf","mm","yj","mf3"};
-	["semi_only_push"]={"mf3","mf3"};
-	["50_level_hq"]={"ws2","xd","jm"};
-	["50_level_3star_rr_hq"]={"ss","ws2","xd","xd","zly","mf2"};
-	["50_level_3star_hq"]={"ss","ws2","xd","jm"};
-	["46level_hq"]={"ss","jm"};
-	["60_level_semi_3star_rr"]={"nj","jm","ws2","xd","xd","zf","zly","mf3"};
-	["60_level_3star_rr_hq"]={"nj","jm","ws2","jy","xd","xd","xd","zf","zly","mf3"};
-	["easy_with_hq"]={"nj","ws2","jyjg","xd","xd","zf","ws","xy","mm","yj","yj","mf3"};
-	["full_75"]={"nj","ws2","jy","xd","xd","xd","xd","kb","ws","xy","zf","mm","yj","yj","mf3"};
-	["sha_lun_ji"]={"nj","jy","xy","jm","jm","jm","jm","jm","ws2","xy","xd","kb","zf","jm"};
-	["mojiang"]={"nj","jm","jm","jm","jm","jm","ws2","jyjg","kb","zf","jm"};
-	["qiang_pao_jian_all_hq"]={"jm","jm","jm"};
-	["70_level_3star_hq"]={"ss","nj","jm","jm","jm","jm","ws","kb","zf","mf3"};
-	["60_level_pipa_hq"]={"ss","jm","ws2","xd","xd","jm"};
-}
-maker_table=maker_list[maker_name];
---{alt,"1",3700}
-st=1500
-lt=2500
+eat_food=false
+food_time=1800000
+food_end_time=0
 ctrl="lctrl"
 alt="lalt"
 shift="lshift"
 alt="lalt"
+maker_list={
+	["hong"]={{"lalt","1",37000},{"lalt","2",37000}};
+	["hong_2"]={{"lalt","q",35000},{"lalt","e",32000}};
+	["50_zly"]={"ss","zly","mf"};
+	["50_hq"]={"ss","mf"};
+	["60_zly"]={"ss","zly","mf","mf"};
+	["76_collect"]={"xj","jy","gg","jm","xd","xd","jm"};
+	["76_collect_with_allhq"]={"gg","jm","jm"};
+	["77_collect"]={"xj","jm","jm","jm","jm","xd","jm"};
+	["77_collect_2hqMeat"]={"jx","nj","xd","xd","xd","jm"};
+	["77_hq"]={"xj","jm","jm","jm","jm","jyjg","xd","jm"};
+	["80_collect"]={"xj","xy","jm","jm","jm","jm","kb","xy","zf","mf"};
+	["80_coolect_zly"]={"xj","xy","jm","jm","jm","jm","jyjg","xy","kb","zf","zly","mf"};
+	["80_collect_zly_Food"]={"xj","xy","jm","jm","jm","xd","kb","xy","zf","zly","mf"};
+	["80_collect_from_8k"]={"xj","xy","jm","jm","jm","jm","jm"};
+	["80_zly"]={"xj","xy","jm","jm","jm","jm","kb","xy","zf","zly","mf"};
+	["80_2star_semi_nq"]={"jx","xy","mf","mf","mf"};
+	["80_2star_semi_hq_zly"]={"xj","zw","xy","gg","jm","jm","jm","jm","kb","jy","xy","xd","kb","zf","zly","zz"};
+	["80_2star_hq_zly"]={"xj","zw","jm","xy","jm","jm","jm","jm","jm","kb","xy","xd","kb","zf","zly","mf"};
+	["80_2star_hq_from4k7_zly"]={"xj","zw","jm","xy","jm","jm","jm","jm","jm","xy","xd","kb","zf","zly","mf"};
+	["80_2star_460hq_zly_620CP"]={"xj","zw","xy","mm","yj","yj","jyjg","jyjg","xy","gg","jyjg","jm","kb","xd","kb","xy","xd","kb","zf","zly","mf"};
+	["80_2star_460hq_609cp"]={"xj","xy","gg","mm","yj","jm","jyjg","zw","xy","gg","jm","jm","kb","xd","kb","gg","xy","xd","kb","zf","gc","zszz"};
+	["80_yixiujiade"]={"xj","zw","xy","jm","jm","jm","kb","xy","xd","xd","kb","zf","mf"};
+}
+maker_table=maker_list[maker_name];
+controller_name="hejian_uper";
+controller_list={
+	["AutoJingXuan"]={{"insert",300},{"left",200},{"insert",3200},{"insert",300}};
+	["AutoBuy_easy"]={{"insert",200},{"left",200},{"insert",500}};
+	["AutoBuy_rare"]={{"insert",200},{"insert",200},{"menu",200},{"insert",200},{"insert",800}};
+	["Destroy_yellow"]={{"insert",200},{"up",200},{"insert",200},{"down",200},{"insert",3200},{"insert",300}};
+	["collect_uper"]={{"insert",200},{"menu",200},{"insert",200},{"insert",500}};
+	["hejian_uper"]={{"insert",200},{"menu",200},{"insert",200},{"insert",200},{"insert",1000}};
+	["Buy_ring_from_npc_first"]={{"insert",500},{"insert",800},{"down",200},{"down",200},{"down",200},{"insert",500},{"down",200},{"down",200},{"down",200},{"down",500}};
+	["Buy_ring_from_npc"]={{"insert",500},{"insert",800},{"down",200},{"down",200},{"insert",500},{"down",200},{"down",200},{"down",200},{"down",500}};
+	["repair_equipment"]={{"insert",500},{"insert",500},{"right",300},{"insert",300},{"left",300},{"insert",300}};
+}
+
+controller_table=controller_list[controller_name];
+fisher_name="lingsha-5.0"
+fisher_list={
+	["lingsha-5.0"]={"pj","pg","w1s","Insert","Insert","w1s","zy","w10.7s","t+p","w5s","w5s","pj","w280ms","tg","w5s","w5s"};
+}
+
+fisher_table=fisher_list[fisher_name];
+--{alt,"1",3700}
+st=1500
+lt=2500
+
 skill_table={
-	["yj"]={nil,"1",lt};	--美名
-	["ws"]={nil,"2",st};	--稳手
-	["mf3"]={nil,"3",lt};	--模范3
+	["mf"]={nil,"1",lt};	--模范
+	["jm"]={nil,"2",lt};	--精密
+	["zf"]={nil,"3",lt};	--祝福
 	["xd"]={nil,"4",lt};	--下地加工
-	["zs"]={nil,"5",lt};	--注视制作
-	["nj"]={nil,"q",st};	--内静
-	["zf"]={nil,"e",lt};	--祝福
-	["zly"]={nil,"r",st};	--再利用
-	["gc"]={nil,"f",lt};	--观察
+	["jyjg"]={nil,"5",lt};	--俭约加工
+	["kb"]={nil,"q",st};	--阔步
+	["xj"]={nil,"e",lt};	--闲静
+	["zw"]={nil,"r",st};	--掌握
+	["jy"]={nil,"f",st};	--俭约
 	["xy"]={nil,"z",st};	--新颖
-	["zw"]={nil,"x",lt};	--掌握
-	["jx"]={nil,"c",lt};	--坚信
+	["gc"]={nil,"x",lt};	--观察
+
 	["mm"]={ctrl,"1",st};	--美名
-	["ws2"]={ctrl,"2",st};	--稳手2
-	["mf2"]={ctrl,"3",lt};	--模范2
-	["jm"]={ctrl,"4",lt};	--精密制作
-	["jy"]={ctrl,"5",st};	--俭约
-	["ay"]={ctrl,"q",st};	--内静
-	["kb"]={ctrl,"e",st};	--阔步
-	["jyjg"]={ctrl,"r",lt};	--简约加工
-	["qs"]={ctrl,"f",st};	--起始
-	["xy2"]={ctrl,"z",st};	--新颖2
-	["zw2"]={ctrl,"x",st};	--掌握2
+	["yj"]={ctrl,"2",lt};	--印记
+	["jx"]={ctrl,"3",lt};	--坚信
+	["gg"]={ctrl,"4",st};	--改革
+	["mj"]={ctrl,"5",lt};	--秘诀
+	["ss"]={ctrl,"q",lt};	--神速
+	["nj"]={ctrl,"e",st};	--内静
+	["jinx"]={ctrl,"r",lt};	--精修
+	["jy2"]={ctrl,"f",st};	--俭约2
+	["zszz"]={ctrl,"z",lt};	--注视制作
+	["zsjg"]={ctrl,"x",lt};	--注视加工
+	["zly"]={ctrl,"c",st};	--再利用
 
-	["jx2"]={shift,"2",st};	--精修2
+	["jg"]={shift,"1",lt};	--加工
+	["jg2"]={shift,"2",lt}; --加工2
+	["cc"]={shift,"3",lt}; --仓促
+	["zxjg"]={shift,"4",lt}; --专心加工
+	["gs"]={shift,"5",lt}; --高速制作
+	["zz"]={shift,"q",lt}; --制作
+	["qr"]={shift,"e",lt}; --最终确认
+	["jzzz"]={shift,"z",lt}; --集中制作
+	["jzjg"]={shift,"x",lt}; --集中加工
 
-	["ss"]={alt,"c",lt}; 	--工匠的神速技巧
-	["kx"]={alt,"x",lt};	--工匠的苦行
 }
 keytable={
-	insert=0x52;
-	down=0x50;
-	up=0x48;
-	left=0x4b;
-	right=0x4d;
-	number_lock=0x45;
-	menu=0x51;
+	["insert"]=0x52;
+	["down"]=0x50;
+	["up"]=0x48;
+	["left"]=0x4b;
+	["right"]=0x4d;
+	["number_lock"]=0x45;
+	["menu"]=0x51;
 }
 music_table={
 	mutong={
@@ -109,14 +150,18 @@ note_key={
 	["5#"]="6";
 	["7b"]="7";
 }
-number=1;
+number=-1;
 function OnEvent(event, arg)
-	OutputLogMessage("event = %s, arg = %s\n", event, arg)
+	--OutputLogMessage("event = %s, arg = %s\n", event, arg)
 	if (event == "PROFILE_ACTIVATED") then
         EnablePrimaryMouseButtonEvents(true);
 	end
-    if (event=="MOUSE_BUTTON_PRESSED" and arg==11) then
-        if (state==false) then
+	if (event=="MOUSE_BUTTON_PRESSED" and arg==11) then
+		if (mode==4) then
+			mode=7;
+		elseif (mode==7) then
+			mode=4;
+        elseif (state==false) then
             PressMouseButton(3)
             state=true
         else
@@ -130,12 +175,20 @@ function OnEvent(event, arg)
 			return;
 		end
 		flag=1;
-		if (open and (mode<=2 or mode==4 or mode==6 or mode==7)) then
-			SetMKeyState(3);
-		elseif (mode==3) then
+		if (mode==3) then
 			music()
-		elseif (mode==5) then
+		elseif (mode==5 or mode==8 or mode==13) then
 			number=times;
+			destroy_flag=1;
+			SetMKeyState(3);
+		elseif (mode==14) then
+			controller_name="Buy_ring_from_npc_first";
+			controller_table=controller_list[controller_name];
+			number=1;
+			destroy_flag=1;
+			SetMKeyState(3);
+		else
+			number=-1;
 			SetMKeyState(3);
 		end
 	end
@@ -148,21 +201,115 @@ function OnEvent(event, arg)
 			maker()
 		elseif (mode==6) then
 			walk()
-		elseif (mode==7) then
-			sold()
+		elseif (mode==7 or mode==8) then
+			controller();
+		elseif (mode==10) then
+			push_mouse();
+		elseif (mode==13) then
+			AutoMakeAndDestroy()
+		elseif (mode==14) then
+			AutoBuyAndDestroy();
 		end
 		SetMKeyState(3);
     end
 end
-function sold() 
-	Insert()
-	Sleep(200)
-	Menu()
-	Sleep(200)
-	Insert()
-	Sleep(200)
-	Insert()
-	Sleep(500)
+function push_mouse()
+	PressAndReleaseMouseButton(1);
+	Sleep(150);
+end
+function AutoMakeAndDestroy()
+	if (destroy_flag==1) then
+		maker();
+		if (open==false) then
+			destroy_flag=2
+			open=true
+		end
+	elseif (destroy_flag==2) then
+		Sleep(1000);
+		PressAndReleaseKey("N");
+		Sleep(2000);
+		PressWithKey(shift,"f",100);
+		Sleep(1000);
+		Down();
+		Sleep(500);
+		number=times;
+		destroy_flag=3;
+		controller_name="AutoJingXuan";
+		controller_table=controller_list[controller_name];
+	elseif (destroy_flag==3) then
+		controller();
+		if (open==false) then
+			PressWithKey(shift,"f",100);
+			Sleep(500);
+			open=true;
+			number=1;
+			controller_name="repair_equipment";
+			controller_table=controller_list[controller_name];
+			if (repair==true) then
+				destroy_flag=4;
+			else
+				PressAndReleaseKey("N");
+				Sleep(500);
+				number=times;
+				destroy_flag=1;
+			end
+		end
+	elseif (destroy_flag==4) then
+			controller();
+		if (open==false) then
+			PressAndReleaseKey("escape");
+			Sleep(500);
+			PressAndReleaseKey("N");
+			Sleep(500);
+			open=true;
+			number=times;
+			destroy_flag=1;
+		end
+	end
+end
+
+function AutoBuyAndDestroy()
+	if (destroy_flag==1) then
+		controller();
+		if (open==false) then
+			destroy_flag=2
+			number=times;
+			controller_name="AutoBuy_rare";
+			controller_table=controller_list[controller_name];
+			open=true
+			Sleep(500)
+		end
+	elseif (destroy_flag==2) then
+		controller();
+		if (open==false) then
+			destroy_flag=3
+			number=times;
+			controller_name="Destroy_yellow";
+			controller_table=controller_list[controller_name];
+			open=true
+		end
+	elseif (destroy_flag==3) then
+		Sleep(500);
+		PressAndReleaseKey("escape")
+		Sleep(1000);
+		PressWithKey(shift,"f",100);
+		Sleep(1000);
+		Down();
+		Sleep(500);
+		number=times;
+		destroy_flag=4;
+	elseif (destroy_flag==4) then
+		controller();
+		if (open==false) then
+			PressWithKey(shift,"f",100);
+			Sleep(500);
+			open=true;
+			controller_name="Buy_ring_from_npc"
+			controller_table=controller_list[controller_name];
+			number=1;
+			destroy_flag=1;
+		end
+	end
 end
 function GroundEmissary() 	--mode2
 	Insert()
@@ -193,24 +340,6 @@ function BuyHouse() 	--mode1
 	Sleep(300);
 end
 
-function Up()
-	PressAndReleaseKey(keytable.up);
-end
-function Down()
-	PressAndReleaseKey(keytable.down);
-end
-function Right()
-	PressAndReleaseKey(keytable.right);
-end
-function Left()
-	PressAndReleaseKey(keytable.left);
-end
-function Insert()
-	PressAndReleaseKey(keytable.insert);
-end
-function Menu()
-	PressAndReleaseKey(keytable.menu);
-end
 
 function music()
 	n=table.getn(ms.note)
@@ -243,6 +372,9 @@ function maker()
 		return
 	end
 	if (flag==1) then
+		if (eat_food) then
+			check_food();
+		end
 		PressMouseButton(1);
 		Sleep(50);
 		ReleaseMouseButton(1);
@@ -274,22 +406,107 @@ function maker()
 		end
 		Sleep(2500);
 		flag=1;
-		if (mode==5) then
+		if (mode==5 or mode==13) then
 			number=number-1
 		end
 	end
 
 end
 
+function controller()
+	
+	if (flag==1) then
+		n=table.getn(controller_table)
+		i=1
+		flag=2
+	elseif (flag==2) then
+		temp=controller_table[i]
+		PressWithKey(nil,keytable[temp[1]],0)
+		Sleep(temp[2]);
+		if (i==n) then
+			flag=1;
+			if (number>0) then
+				number=number-1;
+			end
+			i=0;
+			if (number==0) then
+				open=false;
+				return
+			end
+		else
+			i=i+1
+		end
+	end
+end
+
+function fisher()
+	if (flag==1) then
+		n=table.getn(fisher_table)
+		i=1
+		flag=2
+	elseif (flag==2) then
+		OutputLogMessage("number %d skill , %s\n",i, fisher_table[i])
+		temp=skill_table[fisher_table[i]]
+		if (temp==nil) then
+			temp=fisher_table[i];
+		end
+		if (temp[2]~=nil) then
+			PressWithKey(temp[1],temp[2],100)
+		end
+		Sleep(temp[3]);
+		if (i==n) then
+			flag=1
+			i=0;
+		else
+			i=i+1
+		end
+	end
+end
+function check_food()
+	time_now=GetRunningTime();
+	if (food_end_time-time_now<=300000) then
+		if (food_end_time<time_now) then
+			food_end_time=time_now+food_time;
+		else
+			food_end_time=food_end_time+food_time;
+		end
+		OutputLogMessage("Check Food Time %d \n", time_now)
+		Sleep(2500);
+		PressAndReleaseKey("N");
+		Sleep(2000);
+		PressAndReleaseKey("N");
+		Sleep(1000);
+		PressWithKey(alt,"3",100);
+		Sleep(2500);
+	end
+end
 function PressWithKey(fKey,key,delay)
 	if (fKey~=nil) then
 		PressKey(fKey);
 	end
 	Sleep(delay);
-	PressAndReleaseKey(key)
+	PressAndReleaseKey(key);
 	Sleep(delay);
 	if (fKey~=nil) then
 		ReleaseKey(fKey);
 	end
+end
+function Up()
+	PressAndReleaseKey(keytable.up);
+end
+function Down()
+	PressAndReleaseKey(keytable.down);
+end
+function Right()
+	PressAndReleaseKey(keytable.right);
+end
+function Left()
+	PressAndReleaseKey(keytable.left);
+end
+function Insert()
+	PressAndReleaseKey(keytable.insert);
+end
+function Menu()
+	PressAndReleaseKey(keytable.menu);
 end
 
